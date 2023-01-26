@@ -4,8 +4,8 @@
 #include "definitions.hpp"
 #include <fstream>
 
-void read_file(std::vector<std::vector<double>> &train_x_in_buff,
-               std::vector<std::vector<double>> &train_yref_out_buff,
+int read_file(std::vector<std::vector<double>> &image,
                const char *filename);
+void ToHex(const std::string& s, bool upper_case);
 
 #endif /* READFILE_HPP_ */

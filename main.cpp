@@ -1,13 +1,8 @@
 #include "header.hpp"
 /** @todo
-   * Kunna välja lärhastighet samt epoker. OK
-   * kunna välja antalet noder i in och utgångslagret. OK
-   * Kunna välja antalet dolda lager och antalet noder i de dolda lagren. OK
-
-   * Träningsdatan ska kunna läsas in från en textfil via en array. OK
-   * träning ska ske direkt vid uppstart och knapptryckning ska inte
-     medföra en prediktion förens träningen är slutförd. OK
-   *
+   * Läsa in en bild från en fil, 6 siffor för varje färg ska adderas och lagras som ett värde.
+   * varje värde lagras i en 2D array för att köras genom en 2x2 kernel.
+   * 
 **/
 
 
@@ -16,11 +11,12 @@ int main(void)
 {
 
 
-    std::vector<std::vector<double>> train_yref_out;
+    std::vector<std::vector<double>> image;
     std::vector<std::vector<double>> train_x_in;
-    char filename[] = "test.bmp";
-    read_file(train_x_in, train_yref_out, filename);
+    char filename[] = "4_bw.bmp";
+    read_file(image, filename);
 
+    /*
     Neural_network numbrONE(4, 0, 0, 1, activation_option::TANH);
     numbrONE.print_network();
     //numbrONE.add_hidden_layers(2, 2, activation_option::TANH);
@@ -29,6 +25,7 @@ int main(void)
     numbrONE.train(6000, 0.03);
     numbrONE.print_result();
     numbrONE.print_network(print_option::FULL);
+    */
     while (1)
     {
         usleep(1000 * 20); // to prevent 100% cpu usage
