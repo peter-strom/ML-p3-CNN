@@ -13,7 +13,7 @@ int main(void)
 
     std::vector<std::vector<double>> image;
     std::vector<std::vector<double>> train_x_in;
-    char filename[] = "4_bw.bmp";
+    char filename[] = "bitmaps/4_bw.bmp";
     read_file(image, filename);
 
     /*
