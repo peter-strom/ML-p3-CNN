@@ -1,10 +1,11 @@
-#ifndef DENSE_LAYER_HPP_
-#define DENSE_LAYER_HPP_
+#ifndef DENSELAYER_HPP_
+#define DENSELAYER_HPP_
 
 #include <vector>
 #include <iostream>
 #include <iomanip>
 #include <cstdlib>
+#include <math.h>
 
 enum class activation_option
 {
@@ -55,4 +56,4 @@ private:
                        const double threshold = 0.001);
 };
 
-#endif /* DENSE_LAYER_HPP_ */
+#endif /* DENSELAYER_HPP_ */

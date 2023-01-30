@@ -1,20 +1,16 @@
-#include "header.hpp"
+#include "main.hpp"
 /** @todo
    * Läsa in en bild från en fil, 6 siffor för varje färg ska adderas och lagras som ett värde.
    * varje värde lagras i en 2D array för att köras genom en 2x2 kernel.
    * 
 **/
 
-
-
 int main(void)
 {
-
-
-    std::vector<std::vector<double>> image;
-    std::vector<std::vector<double>> train_x_in;
     char filename[] = "bitmaps/4_bw.bmp";
-    read_file(image, filename);
+    ConvLayer image;
+    image.import_from_bmp(filename);
+    image.print();
 
     /*
     Neural_network numbrONE(4, 0, 0, 1, activation_option::TANH);

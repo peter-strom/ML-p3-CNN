@@ -1,4 +1,4 @@
-#include "Neural_network.hpp"
+#include "neuralnetwork.hpp"
 
 /**
  * @brief Construct a new Neural Network object

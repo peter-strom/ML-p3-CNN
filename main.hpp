@@ -1,5 +1,5 @@
-#ifndef DEFINITIONS_HPP_
-#define DEFINITIONS_HPP_
+#ifndef MAIN_HPP_
+#define MAIN_HPP_
 
 #include <iostream>
 #include <cstdint>
@@ -9,6 +9,9 @@
 #include <sstream>
 #include <cstring>
 #include <string>
-#include <iomanip>
 
-#endif
+#include "neuralnetwork.hpp"
+#include "denselayer.hpp"
+#include "convlayer.hpp"
+
+#endif /* MAIN_HPP_ */

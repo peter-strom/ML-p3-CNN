@@ -1,5 +1,5 @@
-#include "Dense_layer.hpp"
-#include "definitions.hpp"
+#include "denselayer.hpp"
+
 
 /**
  * @brief Construct a new Dense_layer::Dense_layer object

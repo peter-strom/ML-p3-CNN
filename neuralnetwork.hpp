@@ -1,7 +1,7 @@
-#ifndef Neural_network_HPP_
-#define Neural_network_HPP_
-#include "definitions.hpp"
-#include "Dense_layer.hpp"
+#ifndef NEURALNETWORK_HPP_
+#define NEURALNETWORK_HPP_
+
+#include "denselayer.hpp"
 
 /**
  * @brief Class for neural network and output layers.
@@ -58,4 +58,4 @@ public:
                        std::ostream &ostream = std::cout);
 };
 
-#endif
+#endif /* NEURALNETWORK_HPP_ */
