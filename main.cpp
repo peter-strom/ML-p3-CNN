@@ -10,7 +10,11 @@ int main(void)
     char filename[] = "bitmaps/4_bw.bmp";
     ConvLayer image;
     image.import_from_bmp(filename);
-    image.print();
+    image.print(ConvLayer::print_option::IMAGE);
+    image.zero_padd();
+    image.print(ConvLayer::print_option::IMAGE);
+    image.init_kernel(3);
+    image.print(ConvLayer::print_option::KERNEL);
 
     /*
     Neural_network numbrONE(4, 0, 0, 1, activation_option::TANH);

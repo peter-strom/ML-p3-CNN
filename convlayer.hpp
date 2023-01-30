@@ -9,11 +9,26 @@
 
 class ConvLayer
 {
+
 public:
+    enum class print_option
+    {
+        IMAGE,
+        KERNEL,
+        OUTPUT
+    };
+
+    enum class kernel_option
+    {
+        AVERAGE,
+        MAX
+    };
     ConvLayer(void) {}
     ~ConvLayer() {}
     int import_from_bmp(const char *filename);
-    void print();
+    void print(print_option print_option);
+    void zero_padd();
+    void init_kernel(uint8_t size);
 
 private:
     std::vector<std::vector<double>> m_image;

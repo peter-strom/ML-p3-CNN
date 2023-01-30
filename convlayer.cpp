@@ -5,30 +5,28 @@ int ConvLayer::import_from_bmp(const char *filename)
 
     std::ifstream file(filename, std::ios::binary);
     std::ifstream::pos_type filesize;
-    char *memblock;
+    std::string content;
     if (file.is_open())
     {
         file.seekg(0, std::ios::end);
         filesize = file.tellg();
-        memblock = new char[filesize];
+        content.resize(filesize);
         file.seekg(0, std::ios::beg);
-        file.read(memblock, filesize);
+        file.read(&content[0], filesize);
         file.close();
         std::cout << "entire file in memory" << std::endl;
     }
 
-    std::string s(memblock, filesize);
-
     // chek if file is 24bit BNP
-    if (((s[0] & 0xff) != 0x42) || ((s[1] & 0xff) != 0x4d))
+    if (((content[0] & 0xff) != 0x42) || ((content[1] & 0xff) != 0x4d))
     {
         std::cout << " error: only bmp-files allowed!" << std::endl;
         return 1;
     }
 
-    if ((s[28] & 0xff) != 0x18)
+    if ((content[28] & 0xff) != 0x18)
     {
-        std::cout << " error: " << (s[28] & 0xff) << "-bit colors! 24-bit is required!" << std::endl;
+        std::cout << " error: " << (content[28] & 0xff) << "-bit colors! 24-bit is required!" << std::endl;
         return 2;
     }
     // big endian(BE) = MSB on lowest memroy adress
@@ -37,8 +35,8 @@ int ConvLayer::import_from_bmp(const char *filename)
     //  x = 18 19 20 21
     //  y = 22 23 24 25
     //
-    const uint32_t x_width = (s[18] | (s[19] << 8) | (s[20] << 16) | (s[21] << 24));
-    const uint32_t y_height = (s[22] | (s[23] << 8) | (s[24] << 16) | (s[25] << 24));
+    const uint32_t x_width = (content[18] | (content[19] << 8) | (content[20] << 16) | (content[21] << 24));
+    const uint32_t y_height = (content[22] | (content[23] << 8) | (content[24] << 16) | (content[25] << 24));
     std::cout << "width :" << x_width << " heigth :" << y_height << std::endl;
 
     // resize image vector
@@ -54,7 +52,7 @@ int ConvLayer::import_from_bmp(const char *filename)
     {
         for (std::size_t pixel = 0; pixel < m_image[row].size(); pixel++)
         {
-            m_image[row][pixel] = (double)((uint8_t)s[i] + (uint8_t)s[i + 1] + (uint8_t)s[i + 2]) / 3;
+            m_image[row][pixel] = (double)((uint8_t)content[i] + (uint8_t)content[i + 1] + (uint8_t)content[i + 2]) / 3;
             i += 3;
         }
         i += 3;
@@ -62,14 +60,47 @@ int ConvLayer::import_from_bmp(const char *filename)
     return 0;
 }
 
-void ConvLayer::print()
+void ConvLayer::print(print_option print_option)
+{
+    std::vector<std::vector<double>> &vector_ref = m_image;
+    if (print_option == print_option::KERNEL)
+    {
+        vector_ref = m_kernel;
+    }
+    if (print_option == print_option::OUTPUT)
+    {
+        vector_ref = m_output;
+    }
+
+    for (std::size_t row = 0; row < vector_ref.size(); row++)
+    {
+        for (std::size_t pixel = 0; pixel < vector_ref[row].size(); pixel++)
+        {
+            std::cout << std::setfill('0') << std::setw(3) << std::dec << vector_ref[row][pixel] << " ";
+        }
+        std::cout << std::endl;
+    }
+}
+
+void ConvLayer::zero_padd()
 {
     for (std::size_t row = 0; row < m_image.size(); row++)
     {
-        for (std::size_t pixel = 0; pixel < m_image[row].size(); pixel++)
+        m_image[row].insert(m_image[row].begin(), 0.0);
+        m_image[row].push_back(0.0);
+    }
+    m_image.insert(m_image.begin(), std::vector<double>(m_image[0].size()));
+    m_image.push_back(std::vector<double>(m_image[0].size()));
+}
+
+void ConvLayer::init_kernel(uint8_t size)
+{
+    m_kernel.resize(size, std::vector<double>(size));
+    for (size_t i = 0; i < m_kernel.size(); i++)
+    {
+        for (size_t j = 0; j < m_kernel[i].size(); j++)
         {
-            std::cout << std::setfill('0') << std::setw(3) << std::dec << m_image[row][pixel] << " ";
+            m_kernel[i][j] = (double)(std::rand()) / RAND_MAX * 255;
         }
-        std::cout << std::endl;
     }
 }
