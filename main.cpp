@@ -10,21 +10,26 @@ int main(void)
     char filename[] = "bitmaps/4_bw.bmp";
     ConvLayer image;
     image.import_image_from_bmp(filename);
+    std::cout << "the imported bitmap:" << std::endl;
     image.print(ConvLayer::PrintOption::IMAGE);
     image.zero_padding();
+    std::cout << "the image after zero_padding():" << std::endl;
     image.print(ConvLayer::PrintOption::IMAGE);
     image.init_kernel(3);
+    std::cout << "the kernel:" << std::endl;
     image.print(ConvLayer::PrintOption::KERNEL);
     image.convolute(0);
+    std::cout << "the output:" << std::endl;
     image.print(ConvLayer::PrintOption::OUTPUT);
     ConvLayer pooling1;
     pooling1.import_image_from_vector(image.get_output());
     pooling1.pooling();
+    std::cout << "after max pooling 2x2:" << std::endl;
     pooling1.print(ConvLayer::PrintOption::OUTPUT);
     ConvLayer pooling2;
     pooling2.import_image_from_vector(image.get_output());
-    pooling2.print(ConvLayer::PrintOption::IMAGE);
     pooling2.pooling(ConvLayer::PoolingOption::AVERAGE);
+    std::cout << "after average pooling 2x2:" << std::endl;
     pooling2.print(ConvLayer::PrintOption::OUTPUT);
 
     std::vector<std::vector<double>> train_x_in ;
@@ -33,9 +38,11 @@ int main(void)
 
     NeuralNetwork numbrONE(7*7, 0, 0, 4, activation_option::TANH);
     numbrONE.add_hidden_layers(3, 10, activation_option::TANH);
+    std::cout << "the neural net:" << std::endl;
     numbrONE.print_network();
     numbrONE.set_training_data(train_x_in, train_yref_out);
     numbrONE.train(200, 0.03);
+    std::cout << "results afer 200 epochs and a learning rate of 0.03 :" << std::endl;
     numbrONE.print_result();
     //numbrONE.print_network(print_option::FULL);
     

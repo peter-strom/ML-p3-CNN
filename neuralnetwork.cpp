@@ -306,9 +306,13 @@ void NeuralNetwork::print_result(const std::size_t num_decimals,
     ostream << "-=( training result )=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n";
     for (size_t i = 0; i < this->train_x_in_.size(); i++)
     {
-        ostream << "  Input: ";
+        ostream << " Input: ";
         for (size_t j = 0; j < this->train_x_in_[i].size(); j++)
         {
+            if(j == 24)
+            {
+                ostream << std::endl <<"        ";
+            }
             ostream << this->train_x_in_[i][j] << " ";
         }
         ostream << std::endl << "Target: 0b";
