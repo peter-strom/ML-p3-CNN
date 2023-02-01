@@ -62,25 +62,25 @@ int ConvLayer::import_from_bmp(const char *filename)
 
 void ConvLayer::print(print_option print_option)
 {
-    std::vector<std::vector<double>> vector_ref;
+    std::vector<std::vector<double>> *vector_ref = nullptr;
      if (print_option == print_option::IMAGE)
     {
-        vector_ref = m_image;
+        vector_ref = &m_image;
     }
     if (print_option == print_option::KERNEL)
     {
-        vector_ref = m_kernel;
+        vector_ref = &m_kernel;
     }
     if (print_option == print_option::OUTPUT)
     {
-        vector_ref = m_output;
+        vector_ref = &m_output;
     }
 
-    for (std::size_t row = 0; row < vector_ref.size(); row++)
+    for (std::size_t row = 0; row < (*vector_ref).size(); row++)
     {
-        for (std::size_t pixel = 0; pixel < vector_ref[row].size(); pixel++)
+        for (std::size_t pixel = 0; pixel < (*vector_ref)[row].size(); pixel++)
         {
-            std::cout << std::setfill('0') << std::setw(3) << std::dec << vector_ref[row][pixel] << " ";
+            std::cout << std::setfill('0') << std::setw(3) << std::dec << (*vector_ref)[row][pixel] << " ";
         }
         std::cout << std::endl;
     }
