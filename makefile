@@ -2,7 +2,7 @@ CC=g++
 CFLAGS=-Wall
 OBJS=*.cpp
 OUTPUT=-o main
-LIBRARY= -lgpiodcxx
+LIBRARY=
 
 all: make run
 

@@ -9,7 +9,7 @@
  * @param[in] num_outputs number of output signals (training data)
  * @param[in] ao option to select an activation method
  */
-Neural_network::Neural_network(const std::size_t num_inputs,
+NeuralNetwork::NeuralNetwork(const std::size_t num_inputs,
                                const std::size_t num_hidden_layers,
                                const std::size_t num_hidden_nodes,
                                const std::size_t num_outputs,
@@ -31,7 +31,7 @@ Neural_network::Neural_network(const std::size_t num_inputs,
  * @param[in] num_outputs number of output signals (training data)
  * @param[in] af option to select an activation method
  */
-void Neural_network::init(const std::size_t num_inputs,
+void NeuralNetwork::init(const std::size_t num_inputs,
                           std::size_t num_hidden_layers,
                           std::size_t num_hidden_nodes,
                           const std::size_t num_outputs,
@@ -70,7 +70,7 @@ void Neural_network::init(const std::size_t num_inputs,
  * @param[in] num_hidden_nodes number of nodes per hidden layer
  * @param[in] ao option to select an activation method
  */
-void Neural_network::add_hidden_layers(std::size_t num_hidden_layers,
+void NeuralNetwork::add_hidden_layers(std::size_t num_hidden_layers,
                                        std::size_t num_hidden_nodes,
                                        const activation_option ao)
 {
@@ -113,7 +113,7 @@ void Neural_network::add_hidden_layers(std::size_t num_hidden_layers,
  * @param[in] train_x_in training input data 
  * @param[in] train_yref_out traingin output data (target)
  */
-void Neural_network::set_training_data(const std::vector<std::vector<double>> &train_x_in,
+void NeuralNetwork::set_training_data(const std::vector<std::vector<double>> &train_x_in,
                                        const std::vector<std::vector<double>> &train_yref_out)
 {
     this->train_x_in_ = train_x_in;
@@ -129,7 +129,7 @@ void Neural_network::set_training_data(const std::vector<std::vector<double>> &t
  * @param[in] num_epochs number of training epochs
  * @param[in] learning_rate amount of error adjustment used for optimisation
  */
-void Neural_network::train(const std::size_t num_epochs,
+void NeuralNetwork::train(const std::size_t num_epochs,
                            const double learning_rate)
 {
     for (std::size_t i = 0; i < num_epochs; i++)
@@ -152,7 +152,7 @@ void Neural_network::train(const std::size_t num_epochs,
  * @brief compairs the size of input and output training data
  * and fix variations betwen them
  */
-void Neural_network::check_training_data_size(void)
+void NeuralNetwork::check_training_data_size(void)
 {
 
     if (this->train_x_in_.size() < this->train_yref_out_.size())
@@ -169,7 +169,7 @@ void Neural_network::check_training_data_size(void)
  * @brief initiates the training order vector and sets it to the size of train_x_in 
  * 
  */
-void Neural_network::init_training_order(void)
+void NeuralNetwork::init_training_order(void)
 {
     this->train_order_.resize(this->train_x_in_.size());
     for (std::size_t i = 0; i < this->train_order_.size(); i++)
@@ -183,7 +183,7 @@ void Neural_network::init_training_order(void)
  * 
  * @param[in] input input signals 
  */
-void Neural_network::feedforward(const std::vector<double> &input)
+void NeuralNetwork::feedforward(const std::vector<double> &input)
 {
     for (size_t i = 0; i < this->hidden_layers_.size(); i++)
     {
@@ -205,7 +205,7 @@ void Neural_network::feedforward(const std::vector<double> &input)
  * 
  * @param[in] reference training data (y_ref, target)
  */
-void Neural_network::backpropagate(const std::vector<double> &reference)
+void NeuralNetwork::backpropagate(const std::vector<double> &reference)
 {
     this->output_layer_.backpropagate(reference);
 
@@ -230,7 +230,7 @@ void Neural_network::backpropagate(const std::vector<double> &reference)
  * @param[in] input training input data
  * @param[in] learning_rate amount of error adjustment
  */
-void Neural_network::optimize(const std::vector<double> &input,
+void NeuralNetwork::optimize(const std::vector<double> &input,
                               const double learning_rate)
 {
     for (size_t i = 0; i < this->hidden_layers_.size(); i++)
@@ -251,7 +251,7 @@ void Neural_network::optimize(const std::vector<double> &input,
  * @brief randomizes the training order to prevent overfitting.
  * 
  */
-void Neural_network::randomize_training_order(void)
+void NeuralNetwork::randomize_training_order(void)
 {
     for (std::size_t i = 0; i < this->train_order_.size(); ++i)
     {
@@ -266,7 +266,7 @@ void Neural_network::randomize_training_order(void)
  * @brief function to reset all the values in the neural network 
  * 
  */
-void Neural_network::clear(void)
+void NeuralNetwork::clear(void)
 {
     for (size_t i = 0; i < this->hidden_layers_.size(); i++)
     {
@@ -285,7 +285,7 @@ void Neural_network::clear(void)
  * @param[in] input input signals
  * @return const std::vector<double>& 
  */
-const std::vector<double> &Neural_network::predict(const std::vector<double> &input)
+const std::vector<double> &NeuralNetwork::predict(const std::vector<double> &input)
 {
     this->feedforward(input);
     return this->output_layer_.output;
@@ -298,7 +298,7 @@ const std::vector<double> &Neural_network::predict(const std::vector<double> &in
  * @param[in] num_decimals sets the number of decimals for the result print.
  * @param[in] ostream chosen output stream
  */
-void Neural_network::print_result(const std::size_t num_decimals,
+void NeuralNetwork::print_result(const std::size_t num_decimals,
                                   std::ostream &ostream)
 {
     if (this->train_x_in_.size() == 0)
@@ -306,22 +306,32 @@ void Neural_network::print_result(const std::size_t num_decimals,
     ostream << "-=( training result )=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n";
     for (size_t i = 0; i < this->train_x_in_.size(); i++)
     {
-        ostream << "Input: ";
+        ostream << "  Input: ";
         for (size_t j = 0; j < this->train_x_in_[i].size(); j++)
         {
-            ostream << std::setprecision(num_decimals) << this->train_x_in_[i][j] << " ";
+            ostream << this->train_x_in_[i][j] << " ";
         }
-        ostream << "Target: ";
-        ostream << std::setprecision(num_decimals) << this->train_yref_out_[i][0];
+        ostream << std::endl << "Target: 0b";
+        for (auto &j : train_yref_out_[i])
+        {
+            ostream << std::setprecision(num_decimals) << j;
+        }
 
-        ostream << " Pred: ";
-        double print;
+        ostream << std::endl << "  Pred: 0b";
         for (auto &j : this->predict(this->train_x_in_[i]))
         {
-            print = j < 0.1 ? 0 : j;
-            ostream << print << std::setprecision(5) << "\t Real_value: " << j;
+            double test = j<0.5? 0 : 1;
+            ostream << std::setprecision(num_decimals) << test;
         }
-        ostream << "\n";
+
+        ostream << std::endl << "  Pred: ";
+        for (auto &j : this->predict(this->train_x_in_[i]))
+        {
+            double test = j<0.01? 0.001 : j;
+            ostream << std::setprecision(3) << test << "    ";
+        }
+        ostream << std::endl;
+        
     }
     ostream << "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n\n";
 }
@@ -338,7 +348,7 @@ void Neural_network::print_result(const std::size_t num_decimals,
  * @param[in] po chose print option FULL or LITE
  * @param[in] ostream chosen output stream
  */
-void Neural_network::print_network(print_option po, std::ostream &ostream)
+void NeuralNetwork::print_network(print_option po, std::ostream &ostream)
 {
     for (size_t i = 0; i < this->hidden_layers_.size(); i++)
     {

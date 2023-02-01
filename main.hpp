@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include <cstdint>
-#include <gpiod.hpp>
 #include <unistd.h>
 #include <math.h>
 #include <sstream>

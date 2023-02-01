@@ -10,35 +10,35 @@ int main(void)
     char filename[] = "bitmaps/4_bw.bmp";
     ConvLayer image;
     image.import_image_from_bmp(filename);
-    image.print(ConvLayer::print_option::IMAGE);
-    image.zero_padd();
-    image.print(ConvLayer::print_option::IMAGE);
+    image.print(ConvLayer::PrintOption::IMAGE);
+    image.zero_padding();
+    image.print(ConvLayer::PrintOption::IMAGE);
     image.init_kernel(3);
-    image.print(ConvLayer::print_option::KERNEL);
-    image.feedforward(0);
-    image.print(ConvLayer::print_option::OUTPUT);
+    image.print(ConvLayer::PrintOption::KERNEL);
+    image.convolute(0);
+    image.print(ConvLayer::PrintOption::OUTPUT);
     ConvLayer pooling1;
     pooling1.import_image_from_vector(image.get_output());
     pooling1.pooling();
-    pooling1.print(ConvLayer::print_option::OUTPUT);
+    pooling1.print(ConvLayer::PrintOption::OUTPUT);
     ConvLayer pooling2;
     pooling2.import_image_from_vector(image.get_output());
-    pooling2.print(ConvLayer::print_option::IMAGE);
-    pooling2.pooling(ConvLayer::pooling_option::AVERAGE);
-    pooling2.print(ConvLayer::print_option::OUTPUT);
+    pooling2.print(ConvLayer::PrintOption::IMAGE);
+    pooling2.pooling(ConvLayer::PoolingOption::AVERAGE);
+    pooling2.print(ConvLayer::PrintOption::OUTPUT);
 
+    std::vector<std::vector<double>> train_x_in ;
+    train_x_in.push_back(pooling1.get_flatend_output());
+    std::vector<std::vector<double>> train_yref_out = {{0,1,0,0}};
 
-    
-    /*
-    Neural_network numbrONE(4, 0, 0, 1, activation_option::TANH);
-    numbrONE.print_network();
-    //numbrONE.add_hidden_layers(2, 2, activation_option::TANH);
+    NeuralNetwork numbrONE(7*7, 0, 0, 4, activation_option::TANH);
+    numbrONE.add_hidden_layers(3, 10, activation_option::TANH);
     numbrONE.print_network();
     numbrONE.set_training_data(train_x_in, train_yref_out);
-    numbrONE.train(6000, 0.03);
+    numbrONE.train(200, 0.03);
     numbrONE.print_result();
-    numbrONE.print_network(print_option::FULL);
-    */
+    //numbrONE.print_network(print_option::FULL);
+    
     while (1)
     {
         usleep(1000 * 20); // to prevent 100% cpu usage

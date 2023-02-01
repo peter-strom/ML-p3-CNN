@@ -23,7 +23,7 @@ enum class print_option
  * parts of a neural network.
  *
  */
-class Dense_layer
+class DenseLayer
 {
 public:    
     std::vector<double> output;
@@ -31,10 +31,10 @@ public:
     std::vector<double> bias;
     std::vector<std::vector<double>> weights;
     activation_option ao;
-    Dense_layer(void) {}
-    Dense_layer(const std::size_t num_nodes,
+    DenseLayer(void) {}
+    DenseLayer(const std::size_t num_nodes,
                 const std::size_t num_weights);
-    ~Dense_layer();
+    ~DenseLayer();
     std::size_t num_nodes(void) const;
     std::size_t num_weights(void) const;
     void set_activation(const activation_option ao = activation_option::TANH);
@@ -43,7 +43,7 @@ public:
                 const std::size_t num_weights);
     void feedforward(const std::vector<double> &input);
     void backpropagate(const std::vector<double> &reference);
-    void backpropagate(const Dense_layer &next_layer);
+    void backpropagate(const DenseLayer &next_layer);
     void optimize(const std::vector<double> &input,
                   const double learning_rate);
     void print(print_option po = print_option::LITE, std::ostream &ostream = std::cout);
