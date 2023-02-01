@@ -2,14 +2,14 @@
 
 
 /**
- * @brief Construct a new Dense_layer::Dense_layer object
+ * @brief Construct a new DenseLayer::DenseLayer object
  *
  * @details sets the number of nodes and weights in the new dens-layer.
  *
  * @param[in] num_nodes
  * @param[in] num_weights
  */
-Dense_layer::Dense_layer(const std::size_t num_nodes,
+DenseLayer::DenseLayer(const std::size_t num_nodes,
                          const std::size_t num_weights)
 {
     this->resize(num_nodes, num_weights);
@@ -19,7 +19,7 @@ Dense_layer::Dense_layer(const std::size_t num_nodes,
  * @brief Destructor erases all values in each nodes vector.
  *
  */
-Dense_layer::~Dense_layer()
+DenseLayer::~DenseLayer()
 {
     this->clear();
 }
@@ -29,7 +29,7 @@ Dense_layer::~Dense_layer()
  *
  * @return number of nodes.
  */
-std::size_t Dense_layer::num_nodes(void) const
+std::size_t DenseLayer::num_nodes(void) const
 {
     return this->output.size();
 }
@@ -39,7 +39,7 @@ std::size_t Dense_layer::num_nodes(void) const
  *
  * @return number of weights.
  */
-std::size_t Dense_layer::num_weights(void) const
+std::size_t DenseLayer::num_weights(void) const
 {
     if (this->weights.size() == 0)
     {
@@ -56,7 +56,7 @@ std::size_t Dense_layer::num_weights(void) const
  *
  * @param[in] af RELU or TANH
  */
-void Dense_layer::set_activation(const activation_option ao)
+void DenseLayer::set_activation(const activation_option ao)
 {
     this->ao = ao;
 }
@@ -65,7 +65,7 @@ void Dense_layer::set_activation(const activation_option ao)
  * @brief Erases all the elements in the vector containers for selected dense layer
  *
  */
-void Dense_layer::clear(void)
+void DenseLayer::clear(void)
 {
     this->output.clear();
     this->error.clear();
@@ -79,7 +79,7 @@ void Dense_layer::clear(void)
  * @param[in] num_nodes number of nodes
  * @param[in] num_weights number of weights per node
  */
-void Dense_layer::resize(const std::size_t num_nodes,
+void DenseLayer::resize(const std::size_t num_nodes,
                          const std::size_t num_weights)
 {
     this->output.resize(num_nodes, 0.0);
@@ -108,7 +108,7 @@ void Dense_layer::resize(const std::size_t num_nodes,
  *  [input2] - [weight 0 2] [        ]
  * @param[in] input indata from training data or previous layer
  */
-void Dense_layer::feedforward(const std::vector<double> &input)
+void DenseLayer::feedforward(const std::vector<double> &input)
 {
     for (std::size_t i = 0; i < this->num_nodes(); i++)
     {
@@ -138,7 +138,7 @@ void Dense_layer::feedforward(const std::vector<double> &input)
  *
  * @param[in] reference target value from training data (yref)
  */
-void Dense_layer::backpropagate(const std::vector<double> &reference)
+void DenseLayer::backpropagate(const std::vector<double> &reference)
 {
     for (std::size_t i = 0; i < this->num_nodes(); i++)
     {
@@ -162,7 +162,7 @@ void Dense_layer::backpropagate(const std::vector<double> &reference)
  *  [ error  ]   [weight 2 0] * [node 2 error] ...
  * @param[in] next_layer mext dense layer
  */
-void Dense_layer::backpropagate(const Dense_layer &next_layer)
+void DenseLayer::backpropagate(const DenseLayer &next_layer)
 {
     for (std::size_t i = 0; i < this->num_nodes(); i++)
     {
@@ -193,7 +193,7 @@ void Dense_layer::backpropagate(const Dense_layer &next_layer)
  * @param[in] input in-data from training data or previous layer
  * @param[in] learning_rate amount of error adjustment
  */
-void Dense_layer::optimize(const std::vector<double> &input,
+void DenseLayer::optimize(const std::vector<double> &input,
                            const double learning_rate)
 {
     for (std::size_t i = 0; i < this->num_nodes(); i++)
@@ -210,7 +210,7 @@ void Dense_layer::optimize(const std::vector<double> &input,
  *
  * @return double
  */
-inline double Dense_layer::get_random(void)
+inline double DenseLayer::get_random(void)
 {
     return (double)(std::rand()) / RAND_MAX;
 }
@@ -227,7 +227,7 @@ inline double Dense_layer::get_random(void)
  * @param[in] sum
  * @return sum
  */
-inline double Dense_layer::activation(const double sum)
+inline double DenseLayer::activation(const double sum)
 {
     if (this->ao == activation_option::TANH)
     {
@@ -249,7 +249,7 @@ inline double Dense_layer::activation(const double sum)
  * @param[in] output
  * @return output
  */
-inline double Dense_layer::delta_activation(const double output)
+inline double DenseLayer::delta_activation(const double output)
 {
     if (this->ao == activation_option::TANH)
     {
@@ -273,7 +273,7 @@ inline double Dense_layer::delta_activation(const double output)
  * @param[in] po chose print option FULL or LITE
  * @param[in] ostream chosen output stream
  */
-void Dense_layer::print(print_option po, std::ostream &ostream)
+void DenseLayer::print(print_option po, std::ostream &ostream)
 {
     ostream << this->num_weights() << " weights per node.\n";
     ostream << this->num_nodes() << " nodes.\n";
