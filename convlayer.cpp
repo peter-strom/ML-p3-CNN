@@ -63,7 +63,7 @@ int ConvLayer::import_from_bmp(const char *filename)
 void ConvLayer::print(print_option print_option)
 {
     std::vector<std::vector<double>> *vector_ref = nullptr;
-     if (print_option == print_option::IMAGE)
+    if (print_option == print_option::IMAGE)
     {
         vector_ref = &m_image;
     }
@@ -105,8 +105,8 @@ void ConvLayer::init_kernel(uint8_t size)
     {
         for (size_t pixel = 0; pixel < m_kernel[row].size(); pixel++)
         {
-            //m_kernel[row][pixel] = (double)(std::rand()) / RAND_MAX;
-            m_kernel[row][pixel] = 0.5;
+            // m_kernel[row][pixel] = (double)(std::rand()) / RAND_MAX;
+            m_kernel[row][pixel] = 1;
         }
     }
 }
@@ -114,30 +114,27 @@ void ConvLayer::init_kernel(uint8_t size)
 void ConvLayer::feedforward(uint8_t stride)
 {
     uint8_t margin = stride + m_kernel.size();
-    m_output.resize(m_image.size()- margin, std::vector<double>(m_image[0].size()-margin, 0));
+    m_output.resize(m_image.size() - margin, std::vector<double>(m_image[0].size() - margin, 0));
 
     for (size_t row = 0; row < m_output.size(); row++)
     {
         for (size_t pixel = 0; pixel < m_output[row].size(); pixel++)
         {
-            m_output[row][pixel] = convolute(row,pixel);
+            m_output[row][pixel] = convolute(row, pixel);
         }
-        
     }
-    
-   
 }
 
 double ConvLayer::convolute(size_t y_height, size_t x_width)
 {
-    double sum=0;
+    double sum = 0;
     int i = 0;
-    for (size_t y = 0; y < m_kernel.size() ; y++)
+    for (size_t y = 0; y < m_kernel.size(); y++)
     {
         for (size_t x = 0; x < m_kernel[y].size(); x++)
         {
-           sum += m_image[y_height+y][x_width+x] * m_kernel[y][x];
-           i++;
+            sum += m_image[y_height + y][x_width + x] * m_kernel[y][x];
+            i++;
         }
     }
     return uint8_t(sum / i);
