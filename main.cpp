@@ -15,6 +15,9 @@ int main(void)
     image.print(ConvLayer::print_option::IMAGE);
     image.init_kernel(3);
     image.print(ConvLayer::print_option::KERNEL);
+    image.feedforward();
+    image.print(ConvLayer::print_option::OUTPUT);
+    
 
     /*
     Neural_network numbrONE(4, 0, 0, 1, activation_option::TANH);
