@@ -9,7 +9,7 @@ int main(void)
 {
     char filename[] = "bitmaps/4_bw.bmp";
     ConvLayer image;
-    image.import_from_bmp(filename);
+    image.import_image_from_bmp(filename);
     image.print(ConvLayer::print_option::IMAGE);
     image.zero_padd();
     image.print(ConvLayer::print_option::IMAGE);
@@ -17,7 +17,15 @@ int main(void)
     image.print(ConvLayer::print_option::KERNEL);
     image.feedforward();
     image.print(ConvLayer::print_option::OUTPUT);
-    
+    ConvLayer pooling1;
+    pooling1.import_image_from_vector(image.get_output());
+    pooling1.pooling();
+    pooling1.print(ConvLayer::print_option::OUTPUT);
+    ConvLayer pooling2;
+    pooling2.import_image_from_vector(image.get_output());
+    pooling2.print(ConvLayer::print_option::IMAGE);
+    pooling2.pooling(ConvLayer::pooling_option::AVERAGE);
+    pooling2.print(ConvLayer::print_option::OUTPUT);
 
     /*
     Neural_network numbrONE(4, 0, 0, 1, activation_option::TANH);

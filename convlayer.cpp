@@ -1,6 +1,6 @@
 #include "convlayer.hpp"
 
-int ConvLayer::import_from_bmp(const char *filename)
+int ConvLayer::import_image_from_bmp(const char *filename)
 {
 
     std::ifstream file(filename, std::ios::binary);
@@ -60,6 +60,11 @@ int ConvLayer::import_from_bmp(const char *filename)
     return 0;
 }
 
+void ConvLayer::import_image_from_vector(std::vector<std::vector<double>> image)
+{
+    m_image = image;
+}
+
 void ConvLayer::print(print_option print_option)
 {
     std::vector<std::vector<double>> *vector_ref = nullptr;
@@ -106,7 +111,7 @@ void ConvLayer::init_kernel(uint8_t size)
         for (size_t pixel = 0; pixel < m_kernel[row].size(); pixel++)
         {
             // m_kernel[row][pixel] = (double)(std::rand()) / RAND_MAX;
-            m_kernel[row][pixel] = 1;
+            m_kernel[row][pixel] = 0.5;
         }
     }
 }
@@ -137,5 +142,56 @@ double ConvLayer::convolute(size_t y_height, size_t x_width)
             i++;
         }
     }
-    return uint8_t(sum / i);
+
+    sum = i > 0 ? sum / i : 0;
+
+    return uint8_t(sum);
+}
+
+std::vector<std::vector<double>> ConvLayer::get_output()
+{
+    return m_output;
+}
+
+void ConvLayer::pooling(pooling_option pooling_option, size_t pooling_size)
+{
+    init_kernel(pooling_size);
+    m_output.resize(m_image.size() / pooling_size, std::vector<double>(m_image[0].size() / pooling_size, 0));
+
+    for (size_t row = 0; row < m_output.size(); row++)
+    {
+        for (size_t pixel = 0; pixel < m_output[row].size(); pixel++)
+        {
+            m_output[row][pixel] = pool(pooling_option, pooling_size, row, pixel);
+        }
+    }
+}
+
+uint8_t ConvLayer::pool(pooling_option pooling_option, size_t pooling_size, size_t y_height, size_t x_width)
+{
+    double sum = 0;
+    int i = 0;
+    for (size_t y = 0; y < m_kernel.size(); y++)
+    {
+        for (size_t x = 0; x < m_kernel[y].size(); x++)
+        {
+            double val = m_image[y_height * pooling_size + y][x_width * pooling_size + x];
+            if (pooling_option == pooling_option::MAX)
+            {
+                sum = sum < val ? val : sum;
+            }
+            else if (pooling_option == pooling_option::AVERAGE)
+            {
+                sum += val;
+            }
+            i++;
+        }
+    }
+
+    if (pooling_option == pooling_option::AVERAGE)
+    {
+        sum = i > 0 ? (sum / i) : 0;
+    }
+
+    return uint8_t(sum);
 }
