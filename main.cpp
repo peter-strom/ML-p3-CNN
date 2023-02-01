@@ -15,7 +15,7 @@ int main(void)
     image.print(ConvLayer::print_option::IMAGE);
     image.init_kernel(3);
     image.print(ConvLayer::print_option::KERNEL);
-    image.feedforward();
+    image.feedforward(0);
     image.print(ConvLayer::print_option::OUTPUT);
     ConvLayer pooling1;
     pooling1.import_image_from_vector(image.get_output());
@@ -27,6 +27,8 @@ int main(void)
     pooling2.pooling(ConvLayer::pooling_option::AVERAGE);
     pooling2.print(ConvLayer::print_option::OUTPUT);
 
+
+    
     /*
     Neural_network numbrONE(4, 0, 0, 1, activation_option::TANH);
     numbrONE.print_network();

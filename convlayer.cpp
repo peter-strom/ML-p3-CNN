@@ -72,11 +72,11 @@ void ConvLayer::print(print_option print_option)
     {
         vector_ref = &m_image;
     }
-    if (print_option == print_option::KERNEL)
+    else if (print_option == print_option::KERNEL)
     {
         vector_ref = &m_kernel;
     }
-    if (print_option == print_option::OUTPUT)
+    else if (print_option == print_option::OUTPUT)
     {
         vector_ref = &m_output;
     }
@@ -118,8 +118,11 @@ void ConvLayer::init_kernel(uint8_t size)
 
 void ConvLayer::feedforward(uint8_t stride)
 {
-    uint8_t margin = stride + m_kernel.size();
-    m_output.resize(m_image.size() - margin, std::vector<double>(m_image[0].size() - margin, 0));
+    stride = stride + 1;
+    std::size_t output_size_height = ((m_image.size() - m_kernel.size()) / stride)+1;
+    std::size_t output_size_width = ((m_image[0].size() - m_kernel.size()) / stride)+1;
+
+    m_output.resize(output_size_height, std::vector<double>(output_size_width, 0));
 
     for (size_t row = 0; row < m_output.size(); row++)
     {
