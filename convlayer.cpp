@@ -16,22 +16,26 @@ int ConvLayer::import_image_from_bmp(const char *filename)
     {
         file.seekg(0, std::ios::end);
         filesize = file.tellg();
+        if (filesize < SIZE_OF_HEADER)
+        {
+            return 1;
+        }
         content.resize(filesize);
         file.seekg(0, std::ios::beg);
         file.read(&content[0], filesize);
         file.close();
     }
-
+    
     //checks the image if its of type BNP
     if (((content[0]) != 0x42) || ((content[1]) != 0x4d))
     {
-        return 1;
+        return 2;
     }
     
     // chek if BNP is 24-bit
     if ((content[28]) != 0x18)
     {
-        return 2;
+        return 3;
     }
 
     // get number of pixels  (little-endian) 
@@ -41,6 +45,13 @@ int ConvLayer::import_image_from_bmp(const char *filename)
     const uint32_t x_width = (content[18] | (content[19] << 8) | (content[20] << 16) | (content[21] << 24));
     const uint32_t y_height = (content[22] | (content[23] << 8) | (content[24] << 16) | (content[25] << 24));
 
+    auto sum = SIZE_OF_HEADER + (x_width + 1) * y_height * 3;
+    //std::cout << "sum: " << sum << std::endl;
+    //std::cout << content.size() << std::endl;
+    if  (sum > content.size())
+    {
+        return 4;
+    }
     // resize image vector
     m_image.resize(y_height, std::vector<double>(x_width, 0.0));
 
@@ -49,7 +60,7 @@ int ConvLayer::import_image_from_bmp(const char *filename)
     // each pixel have 3 entries.
     // each row ends with 00 00 00
     // invert the row order
-    std::size_t i = 54;
+    std::size_t i = SIZE_OF_HEADER;
     for (int32_t row = m_image.size() - 1; row >= 0; row--)
     {
         for (std::size_t pixel = 0; pixel < m_image[row].size(); pixel++)

@@ -1,15 +1,15 @@
 #include "main.hpp"
-/** @todo
-   * Läsa in en bild från en fil, 6 siffor för varje färg ska adderas och lagras som ett värde.
-   * varje värde lagras i en 2D array för att köras genom en 2x2 kernel.
-   * 
-**/
 
 int main(void)
 {
     char filename[] = "bitmaps/4_bw.bmp";
     ConvLayer image;
-    image.import_image_from_bmp(filename);
+    int s8ret = image.import_image_from_bmp(filename);
+    if(s8ret != 0)
+    {
+        std::cout << "import error: " << s8ret << std::endl;
+        return 0;
+    }
     std::cout << "the imported bitmap:" << std::endl;
     image.print(ConvLayer::PrintOption::IMAGE);
     image.zero_padding();
@@ -36,15 +36,15 @@ int main(void)
     train_x_in.push_back(pooling1.get_flatend_output());
     std::vector<std::vector<double>> train_yref_out = {{0,1,0,0}};
 
-    NeuralNetwork numbrONE(7*7, 0, 0, 4, activation_option::TANH);
-    numbrONE.add_hidden_layers(3, 10, activation_option::TANH);
+    NeuralNetwork nnOne(7*7, 0, 0, 4, activation_option::TANH);
+    nnOne.add_hidden_layers(3, 10, activation_option::TANH);
     std::cout << "the neural net:" << std::endl;
-    numbrONE.print_network();
-    numbrONE.set_training_data(train_x_in, train_yref_out);
-    numbrONE.train(200, 0.03);
+    nnOne.print_network();
+    nnOne.set_training_data(train_x_in, train_yref_out);
+    nnOne.train(200, 0.03);
     std::cout << "results afer 200 epochs and a learning rate of 0.03 :" << std::endl;
-    numbrONE.print_result();
-    //numbrONE.print_network(print_option::FULL);
+    nnOne.print_result();
+    //nnOne.print_network(print_option::FULL);
     
     while (1)
     {

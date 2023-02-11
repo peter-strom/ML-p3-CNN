@@ -7,6 +7,8 @@
 #include <fstream>
 #include <iomanip>
 
+#define SIZE_OF_HEADER 54
+
 /**
  * @brief class for Convolutional layers.
  * Used for extract the details from images.
